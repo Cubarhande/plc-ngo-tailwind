@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Loading...</title>
+
+  <link rel="icon" href="/favicon.svg" />
+
+  <script>
+    (async function () {
+      try {
+        const response = await fetch(
+          "http://localhost:5000/api/settings"
+        );
+
+        const result = await response.json();
+
+        if (result.success && result.data) {
+          // Site Name
+          if (result.data.siteName) {
+            document.title = result.data.siteName;
+          }
+
+          // Favicon
+          if (result.data.favicon) {
+            let favicon = document.querySelector("link[rel='icon']");
+
+            if (!favicon) {
+              favicon = document.createElement("link");
+              favicon.rel = "icon";
+              document.head.appendChild(favicon);
+            }
+
+            favicon.href =
+              "http://localhost:5000" + result.data.favicon;
+          }
+        }
+      } catch (error) {
+        console.error("Failed to load settings:", error);
+
+        document.title = "Parsippany Lions Club1";
+      }
+    })();
+  </script>
+  <script type="module" crossorigin src="/assets/index-CJaz3edT.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-CWAUDmwL.css">
+</head>
+
+<body>
+  <div id="root"></div>
+
+</body>
+
+</html>

@@ -1,123 +1,35 @@
 const express = require("express");
+
 const router = express.Router();
 
-const Event = require("../models/Event");
+const {
+  createEvent,
+  getEvents,
+  getEvent,
+  updateEvent,
+  deleteEvent,
+} = require("../controllers/eventController");
 
-// GET EVENTS
-router.get("/", async (req, res) => {
-  try {
-    const events = await Event.find().sort({ eventDate: 1, createdAt: -1 });
+const upload = require("../middleware/uploadMiddleware");
 
-    res.json({
-      success: true,
-      data: events,
-    });
-  } catch (error) {
-    console.error(error);
+// ================= GET ALL EVENTS =================
 
-    res.status(500).json({
-      success: false,
-      message: "Failed to fetch events",
-    });
-  }
-});
+router.get("/", getEvents);
 
-// GET SINGLE EVENT
-router.get("/:id", async (req, res) => {
-  try {
-    const event = await Event.findById(req.params.id);
+// ================= GET SINGLE EVENT =================
 
-    if (!event) {
-      return res.status(404).json({
-        success: false,
-        message: "Event not found",
-      });
-    }
+router.get("/:id", getEvent);
 
-    res.json({
-      success: true,
-      data: event,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Failed to fetch event",
-    });
-  }
-});
+// ================= CREATE EVENT =================
 
-// CREATE EVENT
-router.post("/", async (req, res) => {
-  try {
-    const event = await Event.create(req.body);
+router.post("/", upload.single("image"), createEvent);
 
-    res.status(201).json({
-      success: true,
-      data: event,
-    });
-  } catch (error) {
-    console.error(error);
+// ================= UPDATE EVENT =================
 
-    res.status(500).json({
-      success: false,
-      message: "Failed to create event",
-    });
-  }
-});
+router.put("/:id", upload.single("image"), updateEvent);
 
-// UPDATE EVENT
-router.put("/:id", async (req, res) => {
-  try {
-    const event = await Event.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
+// ================= DELETE EVENT =================
 
-    if (!event) {
-      return res.status(404).json({
-        success: false,
-        message: "Event not found",
-      });
-    }
-
-    res.json({
-      success: true,
-      data: event,
-    });
-  } catch (error) {
-    console.error(error);
-
-    res.status(500).json({
-      success: false,
-      message: "Failed to update event",
-    });
-  }
-});
-
-// DELETE EVENT
-router.delete("/:id", async (req, res) => {
-  try {
-    const event = await Event.findByIdAndDelete(req.params.id);
-
-    if (!event) {
-      return res.status(404).json({
-        success: false,
-        message: "Event not found",
-      });
-    }
-
-    res.json({
-      success: true,
-      message: "Event deleted successfully",
-    });
-  } catch (error) {
-    console.error(error);
-
-    res.status(500).json({
-      success: false,
-      message: "Failed to delete event",
-    });
-  }
-});
+router.delete("/:id", deleteEvent);
 
 module.exports = router;

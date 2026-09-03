@@ -4,7 +4,7 @@ const eventSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: true,
+      default: "",
       trim: true,
     },
 
@@ -45,7 +45,7 @@ const eventSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 module.exports = mongoose.model("Event", eventSchema);

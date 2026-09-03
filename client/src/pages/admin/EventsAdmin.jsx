@@ -383,7 +383,7 @@ const EventsAdmin = () => {
               name="title"
               value={form.title}
               onChange={handleChange}
-              required
+               
               className="w-full rounded-lg border px-4 py-3"
               placeholder="Event title"
             />

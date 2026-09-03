@@ -396,7 +396,7 @@ const WhatWeDo = () => {
                             text-xl
                             font-bold
                             text-slate-900
-                            dark:text-white
+                           
                           "
                       >
                         {card.title}

@@ -8,7 +8,7 @@ const {
   updateResourceCategory,
   deleteResourceCategory,
 } = require("../controllers/resourceCategoryController");
-
+const upload = require("../middleware/uploadMiddleware");
 const router = express.Router();
 
 // Public
@@ -19,9 +19,9 @@ router.get("/admin", getAdminResourceCategories);
 
 router.get("/:id", getResourceCategory);
 
-router.post("/", createResourceCategory);
+router.post("/", upload.single("bgimage"), createResourceCategory);
 
-router.put("/:id", updateResourceCategory);
+router.put("/:id", upload.single("bgimage"), updateResourceCategory);
 
 router.delete("/:id", deleteResourceCategory);
 

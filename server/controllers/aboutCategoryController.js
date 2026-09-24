@@ -1,22 +1,24 @@
 const AboutCategory = require("../models/AboutCategory");
 
-// GET ALL CATEGORIES
+// =====================================================
+// GET ACTIVE CATEGORIES - FRONTEND
+// =====================================================
+
 exports.getCategories = async (req, res) => {
   try {
-    const categories =
-      await AboutCategory.find({
-        status: true,
-      }).sort({
-        displayOrder: 1,
-        createdAt: -1,
-      });
+    const categories = await AboutCategory.find({
+      status: true,
+    }).sort({
+      displayOrder: 1,
+      createdAt: -1,
+    });
 
     res.status(200).json({
       success: true,
       data: categories,
     });
   } catch (error) {
-    console.error(error);
+    console.error("GET ABOUT CATEGORIES ERROR:", error);
 
     res.status(500).json({
       success: false,
@@ -25,23 +27,24 @@ exports.getCategories = async (req, res) => {
   }
 };
 
-// GET ALL - ADMIN
-exports.getAllCategories = async (
-  req,
-  res
-) => {
+// =====================================================
+// GET ALL CATEGORIES - ADMIN
+// =====================================================
+
+exports.getAllCategories = async (req, res) => {
   try {
-    const categories =
-      await AboutCategory.find().sort({
-        displayOrder: 1,
-        createdAt: -1,
-      });
+    const categories = await AboutCategory.find().sort({
+      displayOrder: 1,
+      createdAt: -1,
+    });
 
     res.status(200).json({
       success: true,
       data: categories,
     });
   } catch (error) {
+    console.error("GET ALL ABOUT CATEGORIES ERROR:", error);
+
     res.status(500).json({
       success: false,
       message: "Failed to fetch categories",
@@ -49,11 +52,11 @@ exports.getAllCategories = async (
   }
 };
 
-// CREATE
-exports.createCategory = async (
-  req,
-  res
-) => {
+// =====================================================
+// CREATE CATEGORY
+// =====================================================
+
+exports.createCategory = async (req, res) => {
   try {
     const {
       name,
@@ -62,33 +65,39 @@ exports.createCategory = async (
       status,
     } = req.body;
 
-    if (!name) {
+    if (!name || !name.trim()) {
       return res.status(400).json({
         success: false,
         message: "Category name is required",
       });
     }
 
-    const category =
-      await AboutCategory.create({
-        name,
-        description,
-        displayOrder:
-          Number(displayOrder) || 0,
-        status:
-          status === "false"
-            ? false
-            : true,
-      });
+    const category = await AboutCategory.create({
+      name: name.trim(),
+      description: description || "",
+
+      displayOrder:
+        displayOrder !== undefined
+          ? Number(displayOrder) || 0
+          : 0,
+
+      status:
+        status === "false"
+          ? false
+          : true,
+
+      bgimage: req.file
+        ? `/uploads/${req.file.filename}`
+        : "",
+    });
 
     res.status(201).json({
       success: true,
-      message:
-        "About category created successfully",
+      message: "About category created successfully",
       data: category,
     });
   } catch (error) {
-    console.error(error);
+    console.error("CREATE ABOUT CATEGORY ERROR:", error);
 
     res.status(500).json({
       success: false,
@@ -97,16 +106,14 @@ exports.createCategory = async (
   }
 };
 
-// UPDATE
-exports.updateCategory = async (
-  req,
-  res
-) => {
+// =====================================================
+// UPDATE CATEGORY
+// =====================================================
+
+exports.updateCategory = async (req, res) => {
   try {
     const category =
-      await AboutCategory.findById(
-        req.params.id
-      );
+      await AboutCategory.findById(req.params.id);
 
     if (!category) {
       return res.status(404).json({
@@ -115,18 +122,20 @@ exports.updateCategory = async (
       });
     }
 
+    // TEXT
     category.name =
-      req.body.name ?? category.name;
+      req.body.name?.trim() || category.name;
 
     category.description =
-      req.body.description ??
-      category.description;
+      req.body.description ?? category.description;
 
-    category.displayOrder =
-      req.body.displayOrder !== undefined
-        ? Number(req.body.displayOrder)
-        : category.displayOrder;
+    // ORDER
+    if (req.body.displayOrder !== undefined) {
+      category.displayOrder =
+        Number(req.body.displayOrder) || 0;
+    }
 
+    // STATUS
     if (req.body.status !== undefined) {
       category.status =
         req.body.status === "false"
@@ -134,16 +143,21 @@ exports.updateCategory = async (
           : true;
     }
 
+    // NEW BACKGROUND IMAGE
+    if (req.file) {
+      category.bgimage =
+        `/uploads/${req.file.filename}`;
+    }
+
     await category.save();
 
     res.status(200).json({
       success: true,
-      message:
-        "About category updated successfully",
+      message: "About category updated successfully",
       data: category,
     });
   } catch (error) {
-    console.error(error);
+    console.error("UPDATE ABOUT CATEGORY ERROR:", error);
 
     res.status(500).json({
       success: false,
@@ -152,16 +166,14 @@ exports.updateCategory = async (
   }
 };
 
-// DELETE
-exports.deleteCategory = async (
-  req,
-  res
-) => {
+// =====================================================
+// DELETE CATEGORY
+// =====================================================
+
+exports.deleteCategory = async (req, res) => {
   try {
     const category =
-      await AboutCategory.findById(
-        req.params.id
-      );
+      await AboutCategory.findById(req.params.id);
 
     if (!category) {
       return res.status(404).json({
@@ -176,11 +188,10 @@ exports.deleteCategory = async (
 
     res.status(200).json({
       success: true,
-      message:
-        "About category deleted successfully",
+      message: "About category deleted successfully",
     });
   } catch (error) {
-    console.error(error);
+    console.error("DELETE ABOUT CATEGORY ERROR:", error);
 
     res.status(500).json({
       success: false,

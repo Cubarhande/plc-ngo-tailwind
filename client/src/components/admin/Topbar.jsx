@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import API from "../../services/api";
 import { logout } from "../../utils/auth";
 
-const Topbar = ({ title = "PLC Admin", onMenuClick }) => {
+const Topbar = ({ title = "Admin", onMenuClick }) => {
   const navigate = useNavigate();
 
   const admin = JSON.parse(localStorage.getItem("admin") || "null");

@@ -249,7 +249,7 @@ const Contact = () => {
 
                   {settings?.phone ? (
                     <a
-                      href={`tel:${settings.phone}`}
+                      href={`tel:${settings.phone.replace(/-/g, "")}`}
                       className="mt-1 block break-all text-sm text-slate-600 transition hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
                     >
                       {settings.phone}

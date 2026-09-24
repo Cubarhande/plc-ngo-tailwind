@@ -1,6 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Edit, Trash2, Plus, X, CheckCircle, AlertCircle } from "lucide-react";
 import API from "../../services/api";
+const IMAGE_URL = (
+  import.meta.env.VITE_IMAGE_URL || "http://localhost:5000"
+).replace(/\/$/, "");
 const AboutCategories = () => {
   const [categories, setCategories] = useState([]);
   const [open, setOpen] = useState(false);
@@ -24,7 +27,12 @@ const AboutCategories = () => {
     description: "",
     displayOrder: 0,
     status: true,
+    bgimage: null,
   });
+
+  const [imagePreview, setImagePreview] = useState("");
+
+  const fileInputRef = useRef(null);
   // ========================= // FETCH CATEGORIES // =========================
   const fetchCategories = async () => {
     try {
@@ -43,8 +51,48 @@ const AboutCategories = () => {
   }, []);
   // ========================= // RESET FORM // =========================
   const resetForm = () => {
-    setForm({ name: "", description: "", displayOrder: 0, status: true });
+    setForm({
+      name: "",
+      description: "",
+      displayOrder: 0,
+      status: true,
+      bgimage: null,
+    });
+
+    setImagePreview("");
     setEditingId(null);
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+  const handleImageChange = (e) => {
+    const file = e.target.files?.[0];
+
+    if (!file) return;
+
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+
+    if (!allowedTypes.includes(file.type)) {
+      showToast("Only JPG, JPEG, PNG and WEBP images are allowed.", "error");
+
+      e.target.value = "";
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      showToast("Image size must be less than 5MB.", "error");
+
+      e.target.value = "";
+      return;
+    }
+
+    setForm((previous) => ({
+      ...previous,
+      bgimage: file,
+    }));
+
+    setImagePreview(URL.createObjectURL(file));
   };
   // ========================= // HANDLE CHANGE // =========================
   const handleChange = (e) => {
@@ -57,24 +105,47 @@ const AboutCategories = () => {
   // // ========================= // SUBMIT // =========================
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!form.name.trim()) {
       showToast("Category name is required.", "error");
       return;
     }
+
     setLoading(true);
+
     try {
+      const formData = new FormData();
+
+      formData.append("name", form.name);
+
+      formData.append("description", form.description);
+
+      formData.append("displayOrder", form.displayOrder);
+
+      formData.append("status", form.status);
+
+      // Only append when a new file was selected
+      if (form.bgimage instanceof File) {
+        formData.append("bgimage", form.bgimage);
+      }
+
       if (editingId) {
-        await API.put(`/about-categories/${editingId}`, form);
+        await API.put(`/about-categories/${editingId}`, formData);
+
         showToast("About category updated successfully.");
       } else {
-        await API.post("/about-categories", form);
+        await API.post("/about-categories", formData);
+
         showToast("About category created successfully.");
       }
+
       setOpen(false);
       resetForm();
+
       await fetchCategories();
     } catch (error) {
       console.error(error);
+
       showToast(
         error.response?.data?.message || "Operation failed. Please try again.",
         "error",
@@ -86,12 +157,17 @@ const AboutCategories = () => {
   // ========================= // EDIT // =========================
   const handleEdit = (category) => {
     setEditingId(category._id);
+
     setForm({
       name: category.name || "",
       description: category.description || "",
       displayOrder: category.displayOrder ?? 0,
       status: category.status ?? true,
+      bgimage: null,
     });
+
+    setImagePreview(category.bgimage ? `${IMAGE_URL}${category.bgimage}` : "");
+
     setOpen(true);
   };
   // ========================= // DELETE // =========================
@@ -184,6 +260,9 @@ const AboutCategories = () => {
                   Description
                 </th>
                 <th className="px-5 py-4 font-semibold text-slate-700">
+  Background
+</th>
+                <th className="px-5 py-4 font-semibold text-slate-700">
                   Order
                 </th>
                 <th className="px-5 py-4 font-semibold text-slate-700">
@@ -212,6 +291,19 @@ const AboutCategories = () => {
                         {category.description || "—"}
                       </p>
                     </td>
+                    <td className="px-5 py-4">
+  {category.bgimage ? (
+    <img
+      src={`${IMAGE_URL}${category.bgimage}`}
+      alt={category.name}
+      className="h-14 w-24 rounded-lg object-cover"
+    />
+  ) : (
+    <span className="text-xs text-slate-400">
+      No image
+    </span>
+  )}
+</td>
                     <td className="px-5 py-4 text-slate-600">
                       {category.displayOrder}
                     </td>
@@ -247,7 +339,7 @@ const AboutCategories = () => {
               ) : (
                 <tr>
                   <td
-                    colSpan="6"
+                    colSpan="7"
                     className="px-5 py-12 text-center text-slate-500"
                   >
                     No About categories found.
@@ -314,6 +406,48 @@ const AboutCategories = () => {
                   className="w-full resize-none rounded-lg border border-slate-300 px-4 py-3 outline-none transition focus:border-slate-900"
                 />
               </div>
+              {/* BACKGROUND IMAGE */}
+
+<div>
+  <label className="mb-2 block text-sm font-medium text-slate-700">
+    Background Image
+  </label>
+
+  <input
+    ref={fileInputRef}
+    type="file"
+    name="bgimage"
+    accept="image/jpeg,image/jpg,image/png,image/webp"
+    onChange={handleImageChange}
+    className="
+      w-full
+      rounded-lg
+      border
+      border-slate-300
+      bg-white
+      px-4
+      py-3
+      text-sm
+      outline-none
+      transition
+      focus:border-slate-900
+    "
+  />
+
+  <p className="mt-1 text-xs text-slate-500">
+    JPG, JPEG, PNG or WEBP. Maximum 5MB.
+  </p>
+
+  {imagePreview && (
+    <div className="mt-4 overflow-hidden rounded-xl border border-slate-200">
+      <img
+        src={imagePreview}
+        alt="Background preview"
+        className="h-40 w-full object-cover"  loading="lazy"
+      />
+    </div>
+  )}
+</div>
               {/* ORDER */}
               <div>
                 <label className="mb-2 block text-sm font-medium text-slate-700">

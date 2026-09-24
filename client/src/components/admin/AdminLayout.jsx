@@ -16,27 +16,52 @@ const AdminLayout = () => {
   };
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-slate-100">
+    <div className="min-h-screen overflow-x-hidden bg-slate-100 dark:bg-slate-950">
+
       {/* =====================================================
           SIDEBAR
       ====================================================== */}
 
-      <Sidebar isOpen={sidebarOpen} onClose={closeSidebar} />
+      <Sidebar
+        isOpen={sidebarOpen}
+        onClose={closeSidebar}
+      />
 
       {/* =====================================================
-          MAIN CONTENT
+          MAIN AREA
       ====================================================== */}
 
       <div className="min-w-0 md:ml-64">
-        {/* TOPBAR */}
 
-        <Topbar onMenuClick={openSidebar} title="PLC Admin" />
+        {/* ===================================================
+            FIXED TOPBAR
+        ==================================================== */}
 
-        {/* PAGE CONTENT */}
+        <div className="fixed left-0 right-0 top-0 z-40 md:left-64">
+          <Topbar
+            onMenuClick={openSidebar}
+            title="PLC Admin"
+          />
+        </div>
 
-        <main className="min-w-0 p-3 sm:p-4 md:p-6">
+        {/* ===================================================
+            PAGE CONTENT
+        ==================================================== */}
+
+        <main
+          className="
+            min-w-0
+            py-18
+            p-3
+            sm:p-4
+            md:p-6
+            sm:py-18
+            md:py-18
+          "
+        >
           <Outlet />
         </main>
+
       </div>
     </div>
   );

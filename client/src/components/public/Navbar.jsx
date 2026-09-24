@@ -128,16 +128,16 @@ const Navbar = () => {
   // CATEGORY URL
   // =====================================================
 
-const getCategoryUrl = (path, category) => {
-  const slug = category.name
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, "-")
-    .replace(/[^\w-]+/g, "")
-    .replace(/--+/g, "-");
+  const getCategoryUrl = (path, category) => {
+    const slug = category.name
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, "-")
+      .replace(/[^\w-]+/g, "")
+      .replace(/--+/g, "-");
 
-  return `${path}?category=${slug}`;
-};
+    return `${path}?category=${slug}`;
+  };
 
   // =====================================================
   // COMMON NAV LINK CLASS
@@ -160,10 +160,7 @@ const getCategoryUrl = (path, category) => {
   return (
     <header
       className="
-        sticky top-0 z-50
-        border-b border-slate-200
-        bg-white/95
-        backdrop-blur-md
+        sticky top-0 z-50 border-b border-slate-200 bg-white/70 backdrop-blur-md
         transition-colors
         dark:border-slate-800
         dark:bg-slate-950/95
@@ -185,10 +182,10 @@ const getCategoryUrl = (path, category) => {
               alt={settings?.siteName || "PLC Organisation"}
               loading="lazy"
               className="
-                h-20
+                h-14
                 w-auto
-                max-w-[180px]
-                object-contain
+                max-w-[100px]
+                object-contain 
               "
             />
           ) : (

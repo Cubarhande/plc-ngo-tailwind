@@ -10,26 +10,24 @@ const {
   deleteCategory,
 } = require("../controllers/aboutCategoryController");
 
+const upload = require("../middleware/uploadMiddleware");
+
+// =====================================================
+// PUBLIC
+// =====================================================
+
 router.get("/", getCategories);
 
-router.get(
-  "/admin",
-  getAllCategories
-);
+// =====================================================
+// ADMIN
+// =====================================================
 
-router.post(
-  "/",
-  createCategory
-);
+router.get("/admin", getAllCategories);
 
-router.put(
-  "/:id",
-  updateCategory
-);
+router.post("/", upload.single("bgimage"), createCategory);
 
-router.delete(
-  "/:id",
-  deleteCategory
-);
+router.put("/:id", upload.single("bgimage"), updateCategory);
+
+router.delete("/:id", deleteCategory);
 
 module.exports = router;

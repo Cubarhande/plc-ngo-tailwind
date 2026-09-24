@@ -7,16 +7,51 @@ const WhatWeDoCard = require("../models/WhatWeDoCard");
 
 exports.createWhatwedoCategories = async (req, res) => {
   try {
+    const {
+      name,
+      description,
+      displayOrder,
+      status,
+    } = req.body;
+
+    if (!name || !name.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "Category name is required.",
+      });
+    }
+
     const category =
-      await WhatwedoCategories.create(req.body);
+      await WhatwedoCategories.create({
+        name: name.trim(),
+        description: description || "",
+        displayOrder: Number(displayOrder) || 0,
+        status:
+          status === "false"
+            ? false
+            : status !== undefined
+              ? Boolean(
+                  status === true ||
+                    status === "true"
+                )
+              : true,
+
+        bgimage: req.file
+          ? `/uploads/${req.file.filename}`
+          : "",
+      });
 
     res.status(201).json({
       success: true,
-      message: "What We Do category created successfully.",
+      message:
+        "What We Do category created successfully.",
       data: category,
     });
   } catch (error) {
-    console.error("Create category error:", error);
+    console.error(
+      "Create category error:",
+      error
+    );
 
     res.status(500).json({
       success: false,
@@ -40,7 +75,10 @@ exports.getCategories = async (req, res) => {
       data: categories,
     });
   } catch (error) {
-    console.error("Get categories error:", error);
+    console.error(
+      "Get categories error:",
+      error
+    );
 
     res.status(500).json({
       success: false,
@@ -53,7 +91,10 @@ exports.getCategories = async (req, res) => {
 // GET SINGLE CATEGORY
 // =====================================================
 
-exports.getWhatwedoCategories = async (req, res) => {
+exports.getWhatwedoCategories = async (
+  req,
+  res
+) => {
   try {
     const category =
       await WhatwedoCategories.findById(
@@ -63,7 +104,8 @@ exports.getWhatwedoCategories = async (req, res) => {
     if (!category) {
       return res.status(404).json({
         success: false,
-        message: "What We Do category not found.",
+        message:
+          "What We Do category not found.",
       });
     }
 
@@ -72,7 +114,10 @@ exports.getWhatwedoCategories = async (req, res) => {
       data: category,
     });
   } catch (error) {
-    console.error("Get category error:", error);
+    console.error(
+      "Get category error:",
+      error
+    );
 
     res.status(500).json({
       success: false,
@@ -85,24 +130,64 @@ exports.getWhatwedoCategories = async (req, res) => {
 // UPDATE CATEGORY
 // =====================================================
 
-exports.updateWhatwedoCategories = async (req, res) => {
+exports.updateWhatwedoCategories = async (
+  req,
+  res
+) => {
   try {
     const category =
-      await WhatwedoCategories.findByIdAndUpdate(
-        req.params.id,
-        req.body,
-        {
-          new: true,
-          runValidators: true,
-        }
+      await WhatwedoCategories.findById(
+        req.params.id
       );
 
     if (!category) {
       return res.status(404).json({
         success: false,
-        message: "What We Do category not found.",
+        message:
+          "What We Do category not found.",
       });
     }
+
+    const {
+      name,
+      description,
+      displayOrder,
+      status,
+    } = req.body;
+
+    if (!name || !name.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "Category name is required.",
+      });
+    }
+
+    category.name = name.trim();
+
+    category.description =
+      description || "";
+
+    category.displayOrder =
+      Number(displayOrder) || 0;
+
+    category.status =
+      status === "false"
+        ? false
+        : status !== undefined
+          ? status === true ||
+            status === "true"
+          : category.status;
+
+    // ================================================
+    // NEW IMAGE
+    // ================================================
+
+    if (req.file) {
+      category.bgimage =
+        `/uploads/${req.file.filename}`;
+    }
+
+    await category.save();
 
     res.json({
       success: true,
@@ -111,7 +196,10 @@ exports.updateWhatwedoCategories = async (req, res) => {
       data: category,
     });
   } catch (error) {
-    console.error("Update category error:", error);
+    console.error(
+      "Update category error:",
+      error
+    );
 
     res.status(500).json({
       success: false,
@@ -124,7 +212,10 @@ exports.updateWhatwedoCategories = async (req, res) => {
 // DELETE CATEGORY
 // =====================================================
 
-exports.deleteWhatwedoCategories = async (req, res) => {
+exports.deleteWhatwedoCategories = async (
+  req,
+  res
+) => {
   try {
     const category =
       await WhatwedoCategories.findByIdAndDelete(
@@ -134,7 +225,8 @@ exports.deleteWhatwedoCategories = async (req, res) => {
     if (!category) {
       return res.status(404).json({
         success: false,
-        message: "What We Do category not found.",
+        message:
+          "What We Do category not found.",
       });
     }
 
@@ -149,7 +241,10 @@ exports.deleteWhatwedoCategories = async (req, res) => {
         "Category and related cards deleted successfully.",
     });
   } catch (error) {
-    console.error("Delete category error:", error);
+    console.error(
+      "Delete category error:",
+      error
+    );
 
     res.status(500).json({
       success: false,

@@ -11,7 +11,7 @@ import {
 } from "react-icons/fa";
 
 import { Link } from "react-router-dom";
-
+import CTASection from "./CTASection";
 import API from "../../services/api";
 
 const IMAGE_URL = import.meta.env.VITE_IMAGE_URL || "http://localhost:5000";
@@ -64,6 +64,9 @@ const Footer = () => {
   ];
 
   return (
+    <>
+    
+<CTASection />
     <footer className="pt-16 bg-slate-950 py-10 text-white sm:pt-20">
       {/* ================= MAIN FOOTER ================= */}
 
@@ -76,7 +79,7 @@ const Footer = () => {
               <img
                 src={`${IMAGE_URL}${settings.logo}`}
                 alt={settings?.siteName || "PLC Organisation"} loading="lazy"
-                className="mb-4 h-20 w-auto max-w-[180px] object-contain"
+                className="mb-4 h-16 w-auto max-w-[180px] object-contain "
               />
             </Link>
           ) : (
@@ -87,7 +90,7 @@ const Footer = () => {
 
           <p className="mt-3 max-w-sm text-sm leading-6 text-slate-400">
             {settings?.siteFooter ||
-              "Working together to create positive change and build a better future."}
+              " We are a non-profit organization dedicated to making a positive impact in our community. Join us in our mission to create a better future for all."}
           </p>
 
           {/* SOCIAL ICONS */}
@@ -101,9 +104,9 @@ const Footer = () => {
               const Icon = social.icon;
 
               return (
-                <a
+                <Link
                   key={social.name}
-                  href={social.url}
+                  to={social.url}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.name}
@@ -111,7 +114,7 @@ const Footer = () => {
                   className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-800 text-slate-300 transition-all duration-200 hover:-translate-y-1 hover:bg-white hover:text-slate-950"
                 >
                   <Icon size={17} />
-                </a>
+                </Link>
               );
             })}
           </div>
@@ -176,8 +179,8 @@ const Footer = () => {
             {/* EMAIL */}
 
             {settings?.email && (
-              <a
-                href={`mailto:${settings.email}`}
+              <Link
+                to={`mailto:${settings.email}`}
                 className="group flex min-w-0 items-start gap-3 transition hover:text-white"
               >
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-800 text-slate-300 transition group-hover:bg-white group-hover:text-slate-950">
@@ -187,14 +190,14 @@ const Footer = () => {
                 <span className="min-w-0 break-words pt-1.5">
                   {settings.email}
                 </span>
-              </a>
+              </Link>
             )}
 
             {/* PHONE */}
 
             {settings?.phone && (
-              <a
-                href={`tel:${settings.phone}`}
+              <Link
+                to={`tel:${settings.phone.replace(/-/g, "")}`}
                 className="group flex items-start gap-3 transition hover:text-white"
               >
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-800 text-slate-300 transition group-hover:bg-white group-hover:text-slate-950">
@@ -202,7 +205,7 @@ const Footer = () => {
                 </span>
 
                 <span className="pt-1.5">{settings.phone}</span>
-              </a>
+              </Link>
             )}
 
             {/* ADDRESS */}
@@ -235,6 +238,7 @@ const Footer = () => {
         </div>
       </div>
     </footer>
+        </>
   );
 };
 

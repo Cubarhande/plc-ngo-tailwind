@@ -10,7 +10,7 @@ const {
   deleteEventCard,
 } = require("../controllers/eventCardController");
 
-const upload = require("../middleware/upload");
+const upload = require("../middleware/uploadMiddleware");
 
 router.get("/", getEventCards);
 

@@ -2,19 +2,25 @@ const express = require("express");
 
 const router = express.Router();
 
-const upload = require("../middleware/upload");
-
+const upload = require("../middleware/uploadMiddleware");
 const authMiddleware = require("../middleware/authMiddleware");
 
 const {
   getSettings,
   updateSettings,
+  deleteSettingsImage,
 } = require("../controllers/settingsController");
 
-// Public GET
+// ========================================
+// PUBLIC GET SETTINGS
+// ========================================
+
 router.get("/", getSettings);
 
-// Protected UPDATE
+// ========================================
+// PROTECTED UPDATE SETTINGS
+// ========================================
+
 router.put(
   "/",
   authMiddleware,
@@ -28,7 +34,13 @@ router.put(
       maxCount: 1,
     },
   ]),
-  updateSettings
+  updateSettings,
 );
+
+// ========================================
+// DELETE LOGO / FAVICON
+// ========================================
+
+router.delete("/image/:field", authMiddleware, deleteSettingsImage);
 
 module.exports = router;

@@ -241,7 +241,7 @@ const Sidebar = ({ isOpen, onClose }) => {
             <img
               src={`${IMAGE_URL}${settings.logo}`}
               alt={settings?.siteName || "PLC Admin"} loading="lazy"
-              className="h-20 w-auto max-w-[180px] object-contain  "
+              className="h-14 w-auto max-w-[180px] object-contain  "
             />
           ) : (
             <span className="truncate text-lg font-bold text-slate-900 sm:text-xl">

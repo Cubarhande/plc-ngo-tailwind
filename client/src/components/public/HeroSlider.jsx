@@ -148,14 +148,14 @@ const HeroSlider = () => {
                   {hero.buttonText}
                 </Link>
               ) : (
-                <a
-                  href={hero.buttonLink}
+                <Link
+                  to={hero.buttonLink}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center rounded-lg bg-white px-6 py-3.5 text-sm font-semibold text-slate-900 shadow-lg transition duration-200 hover:-translate-y-1 hover:bg-slate-100 sm:px-7"
                 >
                   {hero.buttonText}
-                </a>
+                </Link>
               )}
             </div>
           )}

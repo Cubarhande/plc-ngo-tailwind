@@ -14,6 +14,11 @@ const resourceCategorySchema = new mongoose.Schema(
       trim: true,
     },
 
+    bgimage: {
+      type: String,
+      default: "",
+    },
+
     displayOrder: {
       type: Number,
       default: 0,
@@ -26,10 +31,7 @@ const resourceCategorySchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
-module.exports = mongoose.model(
-  "ResourceCategory",
-  resourceCategorySchema
-);
+module.exports = mongoose.model("ResourceCategory", resourceCategorySchema);

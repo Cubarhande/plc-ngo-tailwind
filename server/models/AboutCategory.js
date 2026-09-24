@@ -11,6 +11,13 @@ const aboutCategorySchema = new mongoose.Schema(
     description: {
       type: String,
       default: "",
+      trim: true,
+    },
+
+    // Category background image
+    bgimage: {
+      type: String,
+      default: "",
     },
 
     displayOrder: {

@@ -13,6 +13,10 @@ const whatwedoCategoriesSchema = new mongoose.Schema(
       default: "",
       trim: true,
     },
+    bgimage: {
+      type: String,
+      default: "",
+    },
 
     displayOrder: {
       type: Number,

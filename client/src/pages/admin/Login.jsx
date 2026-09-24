@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 import API from "../../services/api";
-
+const IMAGE_URL = import.meta.env.VITE_IMAGE_URL || "http://localhost:5000";
 const Login = () => {
   const navigate = useNavigate();
 
@@ -15,7 +15,7 @@ const Login = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  const [settings, setSettings] = useState(null);
   // =====================================================
   // HANDLE INPUT
   // =====================================================
@@ -66,6 +66,22 @@ const Login = () => {
     }
   };
 
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const response = await API.get("/settings");
+
+        if (response.data.success) {
+          setSettings(response.data.data);
+        }
+      } catch (error) {
+        console.error("Failed to load footer settings:", error);
+      }
+    };
+
+    fetchSettings();
+  }, []);
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-950 p-4">
       <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl sm:p-8">
@@ -74,11 +90,34 @@ const Login = () => {
         ================================================= */}
 
         <div className="mb-8 text-center">
-          <h1 className="text-2xl font-bold text-slate-900">PLC Admin</h1>
+          {settings?.logo ? (
+            <Link
+              to="/"
+              className="mb-4 flex justify-center"
+              aria-label={`Go to ${settings?.siteName || "PLC Organisation"} home`}
+            >
+              <img
+                src={`${IMAGE_URL}${settings.logo}`}
+                alt={settings?.siteName || "PLC Organisation"}
+                width={180}
+                height={64}
+                loading="eager"
+                decoding="async"
+                className="block h-20 w-auto max-w-[180px] object-contain"
+              />
+            </Link>
+          ) : (
+            <Link
+              to="/"
+              className="inline-block text-xl font-bold text-slate-900 dark:text-white"
+            >
+              {settings?.siteName || "PLC Organisation"}
+            </Link>
+          )}
 
-          <p className="mt-2 text-sm text-slate-500">
-            Login to manage website content
-          </p>
+          {/* <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+    Login to manage website content
+  </p> */}
         </div>
 
         {/* =================================================

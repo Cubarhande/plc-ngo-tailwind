@@ -14,7 +14,7 @@
     (async function () {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/settings"
+          "https://plc-ngo-tailwind.onrender.com/api/settings"
         );
 
         const result = await response.json();
@@ -36,7 +36,7 @@
             }
 
             favicon.href =
-              "http://localhost:5000" + result.data.favicon;
+              "https://plc-ngo-api.onrender.com/" + result.data.favicon;
           }
         }
       } catch (error) {
@@ -46,13 +46,13 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/assets/index-Cj-WAHrZ.js"></script>
+  <script type="module" crossorigin src="/assets/index-BF48FovB.js"></script>
   <link rel="stylesheet" crossorigin href="/assets/index-qb2u7aJc.css">
 </head>
 
 <body>
   <div id="root"></div>
-
+
 
   <script>
   if ('loading' in HTMLImageElement.prototype) {

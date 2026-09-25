@@ -14,11 +14,11 @@
     (async function () {
       try {
         const response = await fetch(
- 
-         // "http://localhost:5000/api/settings",
- 
+
+
+
           "https://plc-ngo-api.onrender.com/api/settings"
- 
+
         );
 
         const result = await response.json();
@@ -40,11 +40,11 @@
             }
 
             favicon.href =
- 
-            //  "http://localhost:5000" + result.data.favicon;
- 
+
+
+
               "https://plc-ngo-api.onrender.com" + result.data.favicon;
- 
+
           }
         }
       } catch (error) {

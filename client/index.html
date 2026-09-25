@@ -14,16 +14,13 @@
     (async function () {
       try {
         const response = await fetch(
-
-          //"http://localhost:5000/api/settings";
-
-          "https://plc-ngo-api.onrender.com/api/settings";
-
+          "https://plc-ngo-api.onrender.com/api/settings"
         );
 
         const result = await response.json();
 
         if (result.success && result.data) {
+
           // Site Name
           if (result.data.siteName) {
             document.title = result.data.siteName;
@@ -40,13 +37,10 @@
             }
 
             favicon.href =
-
-             // "http://localhost:5000" + result.data.favicon;
-
               "https://plc-ngo-api.onrender.com" + result.data.favicon;
-
           }
         }
+
       } catch (error) {
         console.error("Failed to load settings:", error);
 
@@ -54,27 +48,43 @@
       }
     })();
   </script>
+
+  <script type="module" crossorigin src="/assets/index-0QkhBYGy.js"></script>
+
+  <link
+    rel="stylesheet"
+    crossorigin
+    href="/assets/index-DOyBfxcZ.css"
+  />
 </head>
 
 <body>
+
   <div id="root"></div>
 
-  <script type="module" src="/src/main.jsx"></script>
-
   <script>
-    if ('loading' in HTMLImageElement.prototype) {
-      const images = document.querySelectorAll('img[loading="lazy"]');
-      images.forEach(img => {
+    if ("loading" in HTMLImageElement.prototype) {
+
+      const images = document.querySelectorAll(
+        'img[loading="lazy"]'
+      );
+
+      images.forEach((img) => {
         img.src = img.dataset.src;
       });
+
     } else {
+
       // Dynamically import the LazySizes library
-      const script = document.createElement('script');
+      const script = document.createElement("script");
+
       script.src =
-        'https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.1.2/lazysizes.min.js';
+        "https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.1.2/lazysizes.min.js";
+
       document.body.appendChild(script);
     }
   </script>
+
 </body>
 
 </html>

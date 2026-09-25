@@ -14,7 +14,11 @@
     (async function () {
       try {
         const response = await fetch(
-          "https://plc-ngo-tailwind.onrender.com/api/settings"
+<<<<<<< HEAD
+          "http://localhost:5000/api/settings"
+=======
+          "https://plc-ngo-api.onrender.com/api/settings"
+>>>>>>> 1afc4252b62e334000c40c03082f44964d8f06d9
         );
 
         const result = await response.json();
@@ -36,7 +40,11 @@
             }
 
             favicon.href =
-              "https://plc-ngo-api.onrender.com/" + result.data.favicon;
+<<<<<<< HEAD
+              "http://localhost:5000" + result.data.favicon;
+=======
+              "https://plc-ngo-api.onrender.com" + result.data.favicon;
+>>>>>>> 1afc4252b62e334000c40c03082f44964d8f06d9
           }
         }
       } catch (error) {
@@ -46,8 +54,8 @@
       }
     })();
   </script>
-  <script type="module" crossorigin src="/assets/index-BF48FovB.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-qb2u7aJc.css">
+  <script type="module" crossorigin src="/assets/index-CTFjf82U.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-DOyBfxcZ.css">
 </head>
 
 <body>
@@ -55,19 +63,19 @@
 
 
   <script>
-  if ('loading' in HTMLImageElement.prototype) {
-    const images = document.querySelectorAll('img[loading="lazy"]');
-    images.forEach(img => {
-      img.src = img.dataset.src;
-    });
-  } else {
-    // Dynamically import the LazySizes library
-    const script = document.createElement('script');
-    script.src =
-      'https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.1.2/lazysizes.min.js';
-    document.body.appendChild(script);
-  }
-</script>
+    if ('loading' in HTMLImageElement.prototype) {
+      const images = document.querySelectorAll('img[loading="lazy"]');
+      images.forEach(img => {
+        img.src = img.dataset.src;
+      });
+    } else {
+      // Dynamically import the LazySizes library
+      const script = document.createElement('script');
+      script.src =
+        'https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.1.2/lazysizes.min.js';
+      document.body.appendChild(script);
+    }
+  </script>
 </body>
 
 </html>

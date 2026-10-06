@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Vite build
+dist/
+
+# Frontend uploaded files
+server/uploads/
+
+# Logs
+*.log
+npm-debug.log*

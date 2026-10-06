@@ -10,7 +10,7 @@ node_modules/
 dist/
 
 # Frontend uploaded files
-server/uploads/
+server/uploads/*
 
 # Logs
 *.log
